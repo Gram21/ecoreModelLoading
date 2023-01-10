@@ -1,24 +1,33 @@
 package org.example;
 
-import org.eclipse.emf.common.util.URI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 
 public class Main {
+    private static Logger logger = LoggerFactory.getLogger(Main.class);
     private static String mediastoreRepository = "./src/main/resources/ms.repository";
 
     public static void main(String[] args) {
-        System.out.println("Initializing...");
-        var rs = EmfUtil.getResourceSet(EmfUtil.getPcmUris());
-        System.out.println("Loading Model...");
-        var resource = rs.getResource(URI.createFileURI(mediastoreRepository), true);
-        System.out.println("Initializing and loading done!");
+        logger.info("Initializing...");
+        EmfUtil.loadMetamodels(EmfUtil.getPcmUris());
+        logger.info("Loading Model...");
+        var resource = EmfUtil.loadResource(new File(mediastoreRepository));
+        if (resource == null) {
+            logger.error("Unsuccessful loading, aborting!");
+            return;
+        }
+
+        logger.info("Initializing and loading done!");
         try {
             resource.load(null);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         var c = resource.getContents().get(0);
-        System.out.println(c);
+        logger.info("{}", c);
     }
+
 }
