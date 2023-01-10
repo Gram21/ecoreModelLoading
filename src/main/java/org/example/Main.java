@@ -6,11 +6,13 @@ import java.io.IOException;
 
 public class Main {
     private static String mediastoreRepository = "./src/main/resources/ms.repository";
-    private static String mediastoreUml = "./src/main/resources/ms.uml";
+
     public static void main(String[] args) {
-        System.out.println("Hello world!");
-        var rs = EmfUtil.getResourceSet();
+        System.out.println("Initializing...");
+        var rs = EmfUtil.getResourceSet(EmfUtil.getPcmUris());
+        System.out.println("Loading Model...");
         var resource = rs.getResource(URI.createFileURI(mediastoreRepository), true);
+        System.out.println("Initializing and loading done!");
         try {
             resource.load(null);
         } catch (IOException e) {
