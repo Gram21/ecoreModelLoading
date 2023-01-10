@@ -38,6 +38,10 @@ public class EmfUtil {
         return List.of(pcmUri, identifierUri, probabilityFunctionUri, stoexUri, unitsUri);
     }
 
+    public static List<URI> getUmlUris() {
+        return List.of(URI.createFileURI("./src/main/resources/UML.ecore"));
+    }
+
     public static void loadMetamodels(List<URI> metamodelUris) {
         Resource.Factory.Registry resourceFactoryRegistry = Resource.Factory.Registry.INSTANCE;
         Map<String, Object> extensionToFactoryMap = resourceFactoryRegistry.getExtensionToFactoryMap();
