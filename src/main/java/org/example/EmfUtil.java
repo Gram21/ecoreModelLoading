@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.BasicExtendedMetaData;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +41,7 @@ public class EmfUtil {
     public static void loadMetamodels(List<URI> metamodelUris) {
         Resource.Factory.Registry resourceFactoryRegistry = Resource.Factory.Registry.INSTANCE;
         Map<String, Object> extensionToFactoryMap = resourceFactoryRegistry.getExtensionToFactoryMap();
-        extensionToFactoryMap.put(EcorePackage.eNAME, new XMIResourceFactoryImpl());
+        extensionToFactoryMap.put(EcorePackage.eNAME, new EcoreResourceFactoryImpl());
         extensionToFactoryMap.put("*", new XMIResourceFactoryImpl());
 
         ResourceSet rs = new ResourceSetImpl();
@@ -49,8 +50,8 @@ public class EmfUtil {
         rs.getLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetaData);
 
         for (var metamodelUri : metamodelUris) {
-            Resource r = rs.getResource(metamodelUri, true);
-            List<EPackage> metaPackages = getPackageList(r);
+            Resource resource = rs.getResource(metamodelUri, true);
+            List<EPackage> metaPackages = getPackageList(resource);
             registerEPackageURIs(metaPackages);
         }
     }
